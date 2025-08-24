@@ -1,0 +1,7 @@
+<h1>Aqui podras actualizar el perfil de: {{personal.Nombre}} </h1>
+<!-- Tratemos de no olvidar el Token -->
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Actualizar</button>
+</form>
+

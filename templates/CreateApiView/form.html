@@ -1,0 +1,8 @@
+<h1>Registro de Usuarios</h1>
+
+
+
+<form method="post">{% csrf_token %}
+    {{ form.as_p }}<!-- El (.as_p) es para que se vea organizado dentro del html -->
+    <button type="submit">Agregar</button>
+</form>
