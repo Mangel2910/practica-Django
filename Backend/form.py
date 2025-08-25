@@ -6,7 +6,7 @@ from .models import Personal, Usuario
 
 
 # Creamos la clase del formulario usando como parametros form y modelForm
-class FormPruebaView(forms.ModelForm):
+class FormUsuarioView(forms.ModelForm):
     #Creamos una clase meta
     class Meta:
         model = Usuario
@@ -35,5 +35,36 @@ class FormPruebaView(forms.ModelForm):
                 }
             )
         }
+
+
+
+class FormPersonalView(forms.ModelForm):
+    class Meta:
+        model = Personal
+        fields = (
+            'Nombre',
+            'numeroDoc',
+            'Contraseña',
+            'Habilidades',
+        )
+        widgets = {
+            'Nombre': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese su nombre'
+                }
+            ),
+            'numeroDoc': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese su numero de documento'
+                }
+            ),
+            'Contraseña': forms.TextInput(
+                attrs={
+                    'placeholder': 'Ingrese su contraseñas'
+                }
+            )
+        }
+
+
 
         # ¡¡Ahora vamos al views!!

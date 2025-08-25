@@ -1,7 +1,7 @@
 from django.urls import path, include
 
 from . import views
-app_name = "Peronal_app" #Es el nombre asignado para todos los demas urls, lo usamos para especificar a que url queremos acceder.
+app_name = "Personal_app" #Es el nombre asignado para todos los demas urls, lo usamos para especificar a que url queremos acceder.
 urlpatterns = [
     path('personal/', views.PersonalViewSet.as_view()),  # Para crear y listar Personal
 
@@ -38,10 +38,13 @@ urlpatterns = [
     path('eliminar/<int:pk>/', views.PersonalDeleteView.as_view(), name='eliminar'),
     path('confirm_delete/', views.PersonalDelete.as_view(), name='confirm_delete'),
 
-    #Formulario
-    path('form/', views.FormPersonalView.as_view(), name='Form'),
-    path('Form_Welcome/', views.PersonalWelcome.as_view(), name='form_welcome'),
-
+    #Formulario_QR
+    path('form_qr/', views.FormUsuarioView.as_view(), name='Form'),
     #QR
-    path('qr_code/', views.home_view, name="qr_codigo")
+    path('qr_code/', views.home_view, name="qr_codigo"),
+
+    #Formulario Peronal
+    path('form_personal/', views.FormPersonalView.as_view(), name='form_perso'),
+    #Welcome Personal
+    path('personal_inicio/', views.personal_welcome, name='personal_inicio')
 ]

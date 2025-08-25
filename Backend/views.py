@@ -115,7 +115,7 @@ class PersonalCreateView(CreateView):
     template_name = "CreateApiView/form.html"
     model = Personal
     fields = ('__all__')
-    success_url = reverse_lazy('Peronal_app:Pagina_Entrada')
+    success_url = reverse_lazy('Personal_app:Pagina_Entrada')
 
     #Cuando usamos el (reverse_lazy) debemos colocar en parentesis a donde queremos que acceda, llamamos al (app_name de las urls) y despues de los dos puntos (:) colocamos el nombre que fue asignada la url (name='') 
 
@@ -143,7 +143,7 @@ class PersonaUptadeView(UpdateView):
     model = Personal
     fields = '__all__'
     template_name = 'Update/Acualizar.html'
-    success_url = reverse_lazy('Peronal_app:Actualizar')
+    success_url = reverse_lazy('Personal_app:Actualizar')
 
     
 
@@ -156,30 +156,23 @@ class PersonalDelete(TemplateView):
 class PersonalDeleteView(DeleteView):
     model = Personal
     template_name = 'Delete/DeletePersonal.html'
-    success_url = reverse_lazy('Peronal_app:confirm_delete')
+    success_url = reverse_lazy('Personal_app:confirm_delete')
     
 
 
 
-#Usando un formulario
+#Usando un formulario para QR
 
 # Llamamos a la clase del archivo form
-from .form import FormPruebaView
-
-# Creamso el template que se usara despues de registrarse
-class PersonalWelcome(TemplateView):
-    template_name = 'Formulario/Inicio.html'
+from .form import FormUsuarioView
 
 # cramos la clase del formulario 
-class FormPersonalView(CreateView):
+class FormUsuarioView(CreateView):
     template_name = 'Formulario/form.html'
     model = Usuario
     # Podemos cambiar (fields), ya que esta se encuentra en la clase del archivo form.py.
-    form_class = FormPruebaView
-    success_url = reverse_lazy('Peronal_app:qr_codigo')
-
-    
-
+    form_class = FormUsuarioView
+    success_url = reverse_lazy('Personal_app:qr_codigo')
 
 
 
@@ -190,3 +183,20 @@ from .models import Usuario
 def home_view(request):
     obj = Usuario.objects.all()
     return render(request, 'QR/qrWelcome.html', {'obj': obj})
+
+
+
+
+# Formulario Normal
+from .form import FormPersonalView
+
+#Creamos la clase 
+class FormPersonalView(CreateView):
+    template_name = 'Formulario/form_personal.html'
+    model = Personal
+    form_class = FormPersonalView
+    success_url = reverse_lazy('Personal_app:personal_inicio')
+
+def personal_welcome(request):
+    obj = Personal.objects.all()
+    return render(request, 'Formulario/Inicio.html', {'obj': obj})
