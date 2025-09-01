@@ -3,22 +3,24 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Usuarios y QR</title>
+    <title>Usuarios y QR</title> 
 </head>
 <body>
-    <h1>Lista de Usuarios con su Código QR</h1>
-    <ul>
-        {% for usuario in obj %}
-          <ol>
-            <strong>Hola {{ usuario.Nombre }} esta es tu informacion:</strong><br>
-            {% if usuario.qr_code %}
-                <img src="{{ usuario.qr_code.url }}" alt="QR de {{ usuario.Nombre }}" width="150" height="150">
-            {% else %}
-                <p>No hay código QR</p>
-            {% endif %}
-            <button type="submit">Validar</button>
-          </ol>  <br>
-        {% endfor %}
-    </ul>
+    <h1>Bienvenido a CBAPoint</h1>
+    {% if usuario %}
+        <strong>Hola {{ usuario.Nombre }} esta es tu información:</strong><br>
+
+        {% if usuario.qr_code %}
+            <img src="{{ usuario.qr_code.url }}" alt="QR de {{ usuario.Nombre }}" width="150" height="150">
+        {% else %}
+            <p>No hay código QR</p>
+        {% endif %}
+            <a href="{% url 'Personal_app:qr_codigo' %}">
+                <button type="button">Ver Usuarios</button>
+            </a>
+            <br><br>
+    {% else %}
+        <p>No hay usuarios registrados.</p>
+    {% endif %}
 </body>
 </html>

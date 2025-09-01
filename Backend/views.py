@@ -159,34 +159,6 @@ class PersonalDeleteView(DeleteView):
     success_url = reverse_lazy('Personal_app:confirm_delete')
     
 
-
-
-#Usando un formulario para QR
-
-# Llamamos a la clase del archivo form
-from .form import FormUsuarioView
-
-# cramos la clase del formulario 
-class FormUsuarioView(CreateView):
-    template_name = 'Formulario/form.html'
-    model = Usuario
-    # Podemos cambiar (fields), ya que esta se encuentra en la clase del archivo form.py.
-    form_class = FormUsuarioView
-    success_url = reverse_lazy('Personal_app:qr_codigo')
-
-
-
-#Creacion de QR
-from django.shortcuts import render
-from .models import Usuario
-
-def home_view(request):
-    obj = Usuario.objects.all()
-    return render(request, 'QR/qrWelcome.html', {'obj': obj})
-
-
-
-
 # Formulario Normal
 from .form import FormPersonalView
 
@@ -200,3 +172,44 @@ class FormPersonalView(CreateView):
 def personal_welcome(request):
     obj = Personal.objects.all()
     return render(request, 'Formulario/Inicio.html', {'obj': obj})
+
+
+
+#-------------------------------------------------------------------------------
+
+                
+                
+                
+                
+                #Usando un formulario para QR
+
+
+
+                
+
+# Llamamos a la clase del archivo form
+from .form import FormUsuarioView
+
+# cramos la clase del formulario 
+class FormUsuarioView(CreateView):
+    template_name = 'Formulario/form.html'
+    model = Usuario
+    # Podemos cambiar (fields), ya que esta se encuentra en la clase del archivo form.py.
+    form_class = FormUsuarioView
+    success_url = reverse_lazy('Personal_app:lastUser')
+
+
+#Creacion de QR
+from django.shortcuts import render
+from .models import Usuario
+
+
+#Con este le daremos el resultado de todos los usuarios con QR
+def home_view(request):
+    obj = Usuario.objects.all()
+    return render(request, 'QR/QR_Usuarios.html', {'obj': obj})
+
+#Con este le daremos del ultimo usuario registrado, ordenado por id
+def ultimo_user_view(request):
+    ultimo_usuario = Usuario.objects.last()  # O .order_by('-id').first() si quieres ser más explícito
+    return render(request, 'QR/qrWelcome.html', {'usuario': ultimo_usuario})

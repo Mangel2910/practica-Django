@@ -40,8 +40,11 @@ urlpatterns = [
 
     #Formulario_QR
     path('form_qr/', views.FormUsuarioView.as_view(), name='Form'),
-    #QR
+    #QR de todos los usuarios
     path('qr_code/', views.home_view, name="qr_codigo"),
+    #QR del ultimo usuario
+    path('last_user/', views.ultimo_user_view, name='lastUser'),
+
 
     #Formulario Peronal
     path('form_personal/', views.FormPersonalView.as_view(), name='form_perso'),

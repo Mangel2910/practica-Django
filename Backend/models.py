@@ -53,7 +53,7 @@ class Usuario(models.Model):
             version=4,
             error_correction=qrcode.constants.ERROR_CORRECT_H,
             box_size=10,
-            border=4,
+            border=3,
         )
         qr.add_data(url)
         qr.make(fit=True)
@@ -119,7 +119,7 @@ class Usuario(models.Model):
             rounded_qr.paste(logo_circle, pos, logo_circle)
 
         # Crear lienzo y pegar el QR centrado
-        canvas = Image.new('RGBA', (800, 800), 'white')
+        canvas = Image.new('RGBA', (500, 500), 'white')
         qr_pos = (
             (canvas.size[0] - rounded_qr.size[0]) // 2,
             (canvas.size[1] - rounded_qr.size[1]) // 2
