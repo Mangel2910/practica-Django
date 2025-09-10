@@ -35,7 +35,8 @@ class Usuario(models.Model):
     NumeroDoc = models.CharField(max_length=100)
     Correo = models.CharField(max_length=100)
     qr_code = models.ImageField(upload_to='media/qr_codes', blank=True)# Para usar este tenemos que instalar (python -m pip install Pillow) por que vamos a usar una imagen
-    
+    asistencia = models.BooleanField(default=False)
+
     
     #Instalamos el (pip install qrcode)
     def save(self, *args, **kwargs):
@@ -44,7 +45,7 @@ class Usuario(models.Model):
         url = 'https://i.pinimg.com/1200x/1c/8f/b9/1c8fb9feaf1267dec6cfd42660f5e14d.jpg'
 
         # Combinar todos los datos en un solo string
-        data = f"Nombre: {self.Nombre}\nApellido: {self.Apellido}\nDocumento: {self.NumeroDoc}\nCorreo: {self.Correo}"
+        # data = f"Nombre: {self.Nombre}\nApellido: {self.Apellido}\nDocumento: {self.NumeroDoc}\nCorreo: {self.Correo}"
 
         # Generar el QR con esa información
         #dentro del make colocamos lo que es la variable al cual le asiganamos los datos que queremos que se vean al escanear el codigo qr

@@ -202,6 +202,9 @@ class FormUsuarioView(CreateView):
 #Creacion de QR
 from django.shortcuts import render
 from .models import Usuario
+#Validacion de boton
+from django.shortcuts import get_object_or_404, redirect
+from django.http import JsonResponse
 
 
 #Con este le daremos el resultado de todos los usuarios con QR
@@ -213,3 +216,20 @@ def home_view(request):
 def ultimo_user_view(request):
     ultimo_usuario = Usuario.objects.last()  # O .order_by('-id').first() si quieres ser más explícito
     return render(request, 'QR/qrWelcome.html', {'usuario': ultimo_usuario})
+
+#Validaremos al parendiz si entro o no entro a la clase
+def cambiar_estado_boton(request, usuario_id):
+    usuario = get_object_or_404(Usuario, id=usuario_id)
+
+    if request.method == 'POST':
+        valor = request.POST.get('nuevo_estado')
+
+        if valor == 'True':
+            usuario.asistencia = True
+        elif valor == 'False':
+            usuario.asistencia = False
+
+        usuario.save()
+        return redirect('detalle_usuario', usuario_id=usuario.id)
+
+    return render(request, 'usuario_detalle.html', {'usuario': usuario})

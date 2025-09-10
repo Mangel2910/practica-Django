@@ -22,5 +22,12 @@
     {% else %}
         <p>No hay usuarios registrados.</p>
     {% endif %}
+    <button type="submit">
+        {% if usuario.asistencia %}
+            Desactivar
+        {% else %}
+            Activar
+        {% endif %}
+    </button>
 </body>
 </html>
