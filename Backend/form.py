@@ -16,7 +16,6 @@ class FormUsuarioView(forms.ModelForm):
             'Apellido',
             'NumeroDoc',
             'Correo',
-            'qr_code',
         )
 
         # Aqui podemos agregarles estilos a los inputs cuando usamos el ({{ form }}) en el html
@@ -29,9 +28,19 @@ class FormUsuarioView(forms.ModelForm):
                     'placeholder': 'Ingrese su nombre'
                 }
             ),
+            'Apellido': forms.TextInput(
+                attrs={
+                    'placeholder': 'Dijita tu apellido'
+                }
+            ),
             'Correo': forms.TextInput(
                 attrs= {
                     'placeholder': 'Dijite un correo valido'
+                }
+            ),
+            'NumeroDoc': forms.TextInput(
+                attrs={
+                    'placeholder': 'Dijita tu numero de identidad'
                 }
             )
         }

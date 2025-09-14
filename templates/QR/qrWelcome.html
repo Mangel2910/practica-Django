@@ -7,6 +7,14 @@
 </head>
 <body>
     <h1>Bienvenido a CBAPoint</h1>
+    <form action="" method="GET">{% csrf_token %}
+        <div>
+            <input type="text" id="kword" name="kword">
+        </div>
+        <div>
+            <button type="submit">Buscar</button>
+        </div>
+    </form><br><br>
     {% if usuario %}
         <strong>Hola {{ usuario.Nombre }} esta es tu información:</strong><br>
 
@@ -22,12 +30,20 @@
     {% else %}
         <p>No hay usuarios registrados.</p>
     {% endif %}
-    <button type="submit">
-        {% if usuario.asistencia %}
-            Desactivar
-        {% else %}
-            Activar
-        {% endif %}
-    </button>
+
+    <button onclick="toggleAsistencia(1)">Asistio</button>
+
 </body>
+<script>
+async function CambioAsistencia(id) {
+    let response = await fetch(`/usuarios/${id}/Cambio_asistencia/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
+    let data = await response.json();
+    alert(`El usuario ahora tiene asistencia: ${data.asistencia}`);
+}
+</script>
 </html>

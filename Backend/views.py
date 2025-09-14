@@ -1,3 +1,4 @@
+from argparse import Action
 from django.shortcuts import render
 from .models import Personal, Usuario
 from .serializers import PersonalSerializer, HabilidadSerializer
@@ -189,6 +190,8 @@ def personal_welcome(request):
 
 # Llamamos a la clase del archivo form
 from .form import FormUsuarioView
+from .serializers import UsuarioSerializer
+from rest_framework.decorators import action
 
 # cramos la clase del formulario 
 class FormUsuarioView(CreateView):
@@ -197,6 +200,24 @@ class FormUsuarioView(CreateView):
     # Podemos cambiar (fields), ya que esta se encuentra en la clase del archivo form.py.
     form_class = FormUsuarioView
     success_url = reverse_lazy('Personal_app:lastUser')
+    
+    @action(detail=True, methods=['post'])
+    def Cambio_asistencia(self, request, pk=None):
+        usuario = self.get_object()
+        usuario.asistencia = not usuario.asistencia  # Cambia True/False
+        usuario.save()
+        return Response({
+            'id': usuario.id,
+            'Nombre': usuario.Nombre,
+            'Apellido': usuario.Apellido,
+            'asistencia': usuario.asistencia
+        })
+    
+
+#Con este le daremos del ultimo usuario registrado, ordenado por id
+def ultimo_user_view(request):
+    ultimo_usuario = Usuario.objects.last()  # O .order_by('-id').first() si quieres ser más explícito
+    return render(request, 'QR/qrWelcome.html', {'usuario': ultimo_usuario})
 
 
 #Creacion de QR
@@ -204,7 +225,9 @@ from django.shortcuts import render
 from .models import Usuario
 #Validacion de boton
 from django.shortcuts import get_object_or_404, redirect
-from django.http import JsonResponse
+from rest_framework.response import Response
+from rest_framework import viewsets
+from django.views.generic import ListView
 
 
 #Con este le daremos el resultado de todos los usuarios con QR
@@ -212,24 +235,16 @@ def home_view(request):
     obj = Usuario.objects.all()
     return render(request, 'QR/QR_Usuarios.html', {'obj': obj})
 
-#Con este le daremos del ultimo usuario registrado, ordenado por id
-def ultimo_user_view(request):
-    ultimo_usuario = Usuario.objects.last()  # O .order_by('-id').first() si quieres ser más explícito
-    return render(request, 'QR/qrWelcome.html', {'usuario': ultimo_usuario})
 
-#Validaremos al parendiz si entro o no entro a la clase
-def cambiar_estado_boton(request, usuario_id):
-    usuario = get_object_or_404(Usuario, id=usuario_id)
 
-    if request.method == 'POST':
-        valor = request.POST.get('nuevo_estado')
+class ListUsuarios(ListView):
+    template_name = 'templates/qrWelcome.html'
+    def buscarUsuario(self):
+        palabra_clave = self.request.GET.get("kword", '')
+        lista = Usuario.objects.filter(
+            #__icontains Busca la cadena que se ingrese en el input ej: Jorge = j la j es la cadena y envia todos los relacionados con la letra j
+            Nombre__icontains=palabra_clave
+        )
+        return lista
 
-        if valor == 'True':
-            usuario.asistencia = True
-        elif valor == 'False':
-            usuario.asistencia = False
-
-        usuario.save()
-        return redirect('detalle_usuario', usuario_id=usuario.id)
-
-    return render(request, 'usuario_detalle.html', {'usuario': usuario})
+    
