@@ -6,10 +6,15 @@
     <title>Usuarios y QR</title>
 </head>
 <body>
-    
+    <form method="get"> {% csrf_token %}
+        <div>
+            <input type="text" id="kword" name="kword" placeholder="Buscar usuario">
+            <button type="submit">Buscar</button>
+        </div>
+    </form><br><br>
     <ul>
         {% for usuario in obj %}
-          <ol>
+          
             <strong>Hola {{ usuario.Nombre }} esta es tu informacion:</strong><br>
             {% if usuario.qr_code %}
                 <img src="{{ usuario.qr_code.url }}" alt="QR de {{ usuario.Nombre }}" width="150" height="150">
@@ -19,7 +24,7 @@
             <a href="{% url 'Personal_app:Form' %}">
                 <button type="button">Volver a Form</button>
             </a>
-          </ol>  <br>
+        <br>
         {% endfor %}
     </ul>
 </body>

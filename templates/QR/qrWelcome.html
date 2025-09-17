@@ -7,14 +7,6 @@
 </head>
 <body>
     <h1>Bienvenido a CBAPoint</h1>
-    <form action="" method="GET">{% csrf_token %}
-        <div>
-            <input type="text" id="kword" name="kword">
-        </div>
-        <div>
-            <button type="submit">Buscar</button>
-        </div>
-    </form><br><br>
     {% if usuario %}
         <strong>Hola {{ usuario.Nombre }} esta es tu información:</strong><br>
 

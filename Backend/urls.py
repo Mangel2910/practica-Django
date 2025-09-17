@@ -39,7 +39,7 @@ urlpatterns = [
     path('confirm_delete/', views.PersonalDelete.as_view(), name='confirm_delete'),
 
     #Formulario_QR
-    path('', views.FormUsuarioView.as_view(), name='Form'),
+    path('form_user', views.FormUsuarioView.as_view(), name='Form'),
     #QR de todos los usuarios
     path('qr_code/', views.home_view, name="qr_codigo"),
     #QR del ultimo usuario
@@ -49,5 +49,10 @@ urlpatterns = [
     #Formulario Peronal
     path('form_personal/', views.FormPersonalView.as_view(), name='form_perso'),
     #Welcome Personal
-    path('personal_inicio/', views.personal_welcome, name='personal_inicio')
+    path('personal_inicio/', views.personal_welcome, name='personal_inicio'),
+    
+
+
+    #Panel Administrativo
+    path('escaneo/', views.escaner_qr, name='escaner_admin'),
 ]

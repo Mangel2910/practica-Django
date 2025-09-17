@@ -201,6 +201,11 @@ class FormUsuarioView(CreateView):
     form_class = FormUsuarioView
     success_url = reverse_lazy('Personal_app:lastUser')
     
+    #Con este le daremos del ultimo usuario registrado, ordenado por id
+def ultimo_user_view(request):
+    ultimo_usuario = Usuario.objects.last()  # O .order_by('-id').first() si quieres ser más explícito
+    return render(request, 'QR/qrWelcome.html', {'usuario': ultimo_usuario})
+
     @action(detail=True, methods=['post'])
     def Cambio_asistencia(self, request, pk=None):
         usuario = self.get_object()
@@ -212,13 +217,6 @@ class FormUsuarioView(CreateView):
             'Apellido': usuario.Apellido,
             'asistencia': usuario.asistencia
         })
-    
-
-#Con este le daremos del ultimo usuario registrado, ordenado por id
-def ultimo_user_view(request):
-    ultimo_usuario = Usuario.objects.last()  # O .order_by('-id').first() si quieres ser más explícito
-    return render(request, 'QR/qrWelcome.html', {'usuario': ultimo_usuario})
-
 
 #Creacion de QR
 from django.shortcuts import render
@@ -226,9 +224,21 @@ from .models import Usuario
 #Validacion de boton
 from django.shortcuts import get_object_or_404, redirect
 from rest_framework.response import Response
-from rest_framework import viewsets
 from django.views.generic import ListView
 
+
+
+class ListUsuarios(ListView):
+    template_name = 'QR/QR_Usuarios.html'
+    context_object_name = 'obj'
+# Buscar Usuarios que se han registrado
+    def get_queryset(self):
+        palabra_clave = self.request.GET.get("kword", '')
+        lista_Usuarios = Usuario.objects.filter(
+            #__icontains Busca la cadena que se ingrese en el input ej: Jorge = j la j es la cadena y envia todos los relacionados con la letra j
+            Nombre__icontains=palabra_clave
+        )
+        return lista_Usuarios
 
 #Con este le daremos el resultado de todos los usuarios con QR
 def home_view(request):
@@ -237,14 +247,19 @@ def home_view(request):
 
 
 
-class ListUsuarios(ListView):
-    template_name = 'templates/qrWelcome.html'
-    def buscarUsuario(self):
-        palabra_clave = self.request.GET.get("kword", '')
-        lista = Usuario.objects.filter(
-            #__icontains Busca la cadena que se ingrese en el input ej: Jorge = j la j es la cadena y envia todos los relacionados con la letra j
-            Nombre__icontains=palabra_clave
-        )
-        return lista
 
-    
+
+
+# -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+                        # Panel Adminitsrativo para el escaneo de QE de aprendiz
+
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def escaner_qr(request):
+    context = {
+        "is_admin": request.user.is_staff  # o request.user.is_superuser
+    }
+    return render(request, "QR/Escaneo_QR.html", context)
